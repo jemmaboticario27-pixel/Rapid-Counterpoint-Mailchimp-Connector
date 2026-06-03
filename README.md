@@ -7,6 +7,8 @@ Updated 02/20/2026
 
 The Rapid Mailchimp Connector automatically syncs customer and sales data from Counterpoint to Mailchimp to support targeted email campaigns and audience segmentation. It can also import new or updated customer information from Mailchimp back into Counterpoint, ensuring both systems stay up to date.
 
+If configured, **Phone 1** or **Mobile Phone 1** can be included to support Mailchimp SMS Marketing
+
 ---
 
 ## Minimum System Requirements:
@@ -22,20 +24,22 @@ If you would like the Mailchimp connector but your system does not meet these mi
 ## Table of Contents
 
 - [Minimum System Requirements](#minimum-system-requirements)
-- [SECTION 1: Customer Information & Mailchimp Field Mapping](#section-2-customer-information--mailchimp-field-mapping)
-- [SECTION 2: Mailchimp Audiences and Contacts](#section-1-mailchimp-audiences-and-contacts)
-- [SECTION 3: Ticket & Item Information](#section-3-ticket--item-information)
-- [SECTION 4: Connector Sync Process](#section-5-connector-sync-process)
-- [SECTION 5: Common Customer Sync Questions](#section-6-common-customer-sync-questions)
-- [SECTION 6: Troubleshooting and Sync Status Codes](#section-7-troubleshooting-and-sync-status-codes)
-- [SECTION 7: Importing Customers from Mailchimp into Counterpoint](#section-8-importing-customers-from-mailchimp-into-counterpoint)
-- [SECTION 8: Configuration](#section-9-configuration)
-- [SECTION 9: Additional Mailchimp Tools](#section-10-additional-mailchimp-tools)
+- [Section 1: Mailchimp Customer Records](#section-1-mailchimp-customer-records)
+- [Section 2: Mailchimp Configuration](#section-2-mailchimp-configuration)
+- [Section 3: Mailchimp Field Mapping – Customers Up](#section-3-mailchimp-field-mapping--customers-up)
+- [Section 4: Mailchimp Field Mapping – Customers Down](#section-4-mailchimp-field-mapping--customers-down)
+- [SECTION 5: Customer Information & Mailchimp Field Mapping](#section-2-customer-information--mailchimp-field-mapping)
+- [SECTION 6: Mailchimp Audiences and Contacts](#section-1-mailchimp-audiences-and-contacts)
+- [SECTION 7: Ticket & Item Information](#section-3-ticket--item-information)
+- [Section 8: Mailchimp Customer Status View](#section-9-mailchimp-customer-status-view)
+- [Section 9: Run Mailchimp Connector Button](#section-10-run-mailchimp-connector-button)
+- [Section 10: Mark All Mailchimp Messages as Read](#section-11-mark-all-mailchimp-messages-as-read)
+- [Section 11: Mailchimp Connector Execution and Sync Timing](#section-12-mailchimp-connector-execution-and-sync-timing)
 - [Conclusion](#conclusion)
 
 ---
 
-## SECTION 1: Customer Information & Mailchimp Field Mapping
+## SECTION 1: Klaviyo Customer Records
 
 ### Mailchimp Customers
 
