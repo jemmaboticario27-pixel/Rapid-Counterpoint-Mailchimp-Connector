@@ -45,7 +45,7 @@ If you would like the Mailchimp connector but your system does not meet these mi
 
 The Mailchimp Connector adds a **Mailchimp Customers** button within Counterpoint, providing access to Mailchimp-specific customer fields directly from the Counterpoint customer record.
 
-<img width="1001" height="201" alt="image" src="https://github.com/user-attachments/assets/7f2dcfdb-dba5-46de-89a7-f76a7cf723bb" />
+![Customer Record - Klaviyo Customers Button](./images/counterpoint-customer-record-mailchimp-customers-button.png)
 
 
 
