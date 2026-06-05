@@ -42,7 +42,7 @@ If you would like the Mailchimp connector but your system does not meet these mi
 
 The Mailchimp Connector adds a **Mailchimp Customers** button within Counterpoint, providing access to Mailchimp-specific customer fields directly from the Counterpoint customer record.
 
-![Customer Record - Klaviyo Customers Button](./images/counterpoint-customer-record-mailchimp-customers-button.png)
+![Customer Record - Mailchimp Customers Button](./images/counterpoint-customer-record-mailchimp-customers-button.png)
 
 The email address on the Mailchimp customer record is populated from **Email Address 1** on the Counterpoint customer record.
 
@@ -271,9 +271,16 @@ Examples:
 | United States and Canada | `+1` |
 | Mexico | `+52` |
 
-### Send Sales  
-When enabled, the connector pushes sales data from Counterpoint to Mailchimp, allowing sales activity to be used for audience segmentation, reporting, or targeted marketing.  
-- If disabled, only customer data will sync.
+### Send Sales
+
+Controls whether sales data is synchronized from Counterpoint to Mailchimp.
+
+| Setting | Behavior |
+|---|---|
+| **Checked** | Sales data is sent from Counterpoint to Mailchimp. |
+| **Unchecked** | Only customer data is synchronized. |
+
+When checked, sales activity can be used in Mailchimp for audience segmentation, reporting, and targeted marketing.
 
 ### Start Date Days  
 Defines how many days of historical sales data should be pushed during the **initial** sync.  
@@ -315,25 +322,28 @@ Example of filtering using the operator **contains**:
 
 ![Example of filtering by contains](./images/segment-builder-category-contains.png)  
 
-
 ### Internal Configuration Options  
 Additional internal configuration options exist within the connector. These are primarily used by programmers to optimize performance or to assist in troubleshooting. These values should not be adjusted by end users.
 
 ---
 
-### Mailchimp Field Mapping
+## SECTION 3: Mailchimp Field Mapping - Customers Up
 
-It is important to distinguish between **customer** information and information related to **tickets** or **items**. Mailchimp accepts a wide range of customer data but supports only limited ticket and item information.
+The **Mailchimp Field Mapping – Customers Up** screen provides a user interface for managing which customer fields are sent from Counterpoint up to Mailchimp.
 
-For sycning customer information, the Mailchimp connector uses **custom field mapping**, allowing nearly any field from the Counterpoint customer record to be sent to Mailchimp. Customer merge fields and their mappings are displayed in **Counterpoint > Connectors > Mailchimp > Mailchimp Field Mapping**.  
+This table defines how customer profile data in Counterpoint maps to Mailchimp profile properties. The standard deployment includes a predefined set of fields that are automatically synced. Adjustments to this table should generally be performed by a programmer.
 
-<img width="1687" height="213" alt="image" src="https://github.com/user-attachments/assets/0055eb47-aca2-4727-9db2-41c944523b22" />
+Note: This is best viewed in _table view_.
 
-This screen shows which Counterpoint fields populate Mailchimp merge fields and how each is mapped. To adjust field mappings, consult with Rapid.
+![Mailchimp Field Mapping Customers Up in Table View](./images/counterpoint-mailchimp-field-mapping-customers-up.png)
 
-![Example of Mailchimp connector field mapping](./images/counterpoint-mailchimp-connector-field-mapping.png)  
+Calculated fields are not included by default. Any request to add calculated fields must be reviewed and quoted separately by Rapid.
 
-### Below are _examples_ of customer details that can be sent to Mailchimp:
+**Note:** **Email Address 1** is a required field and must be sent to Mailchimp.
+
+### Standard Customer Profile Fields Sent to Mailchimp
+
+The following customer fields are included in a standard Mailchimp connector deployment:
 
 1. Email 1 _(Required and hard-coded, not included in the mapping table)_
 2. Customer Number *  _(Strongly recommended)_
@@ -378,40 +388,77 @@ Example of a calculated field:
 
 ---
 
-## Accessing Mailchimp Customer Records
+## SECTION 4: Mailchimp Field Mapping – Customers Down
 
-All Mailchimp customer records can also be accessed from:
+The **Mailchimp Field Mapping – Customers Down** table provides a user interface for managing which customer fields are imported from Mailchimp down into Counterpoint.
 
-**Connectors > Mailchimp > Mailchimp Customer**
+For clients using web-based sign-up forms or other Mailchimp integrations, this functionality allows customer data entered in Mailchimp to be imported into Counterpoint. This may include:
+- Updating (overwriting) existing customer fields in Counterpoint
+- Inserting new Counterpoint customer records when no matching record exists
 
-<img width="1695" height="217" alt="image" src="https://github.com/user-attachments/assets/21dc110e-2f75-4dc6-a770-e386627dc765" />
+Note: This is best viewed in _table view_.
 
-This view allows records to be displayed in **table view**, where filters can be applied to review customers based on their current sync status.
+![Mailchimp Field Mapping Customers Down in Table View](./images/counterpoint-Mailchimp-field-mapping-customers-down-table-view.png)
+
+### Default Behavior
+
+In a standard deployment, **no fields are imported** from Mailchimp. All fields in the table are set to **No Action** by default.
+
+Any change to this behavior must be requested by the client, and a programmer will configure the table accordingly.
+
+### Action Types
+
+Each field in the **Customers Down** mapping table is assigned an action type that controls how Mailchimp data is applied in Counterpoint:
+
+- **Insert Only**  
+  The field is set by Mailchimp in Counterpoint **only when a new Counterpoint customer record is created**.
+
+- **Update Existing**  
+  When the field value changes in Mailchimp, the corresponding field in Counterpoint is updated.  
+  This action does **not** set the field during new customer creation.
+
+- **Insert and Update**  
+  The field is set by Mailchimp when a new Counterpoint customer record is created, and it is also updated in Counterpoint when the value changes in Mailchimp.
+
+- **No Action**  
+  The field is not set or updated by Mailchimp in Counterpoint.
+
+**Note:**  
+- The two action types that include **Insert** only function when the configuration option **Insert New Customer Records** is enabled.  
+- The two action types that include **Update** will function regardless of that configuration setting.
+
+Use caution when selecting which Mailchimp fields are allowed to overwrite Counterpoint data. Consult with your **Business Analyst (BA)** for guidance before enabling field updates.
+
+### Retain Counterpoint Value if Mailchimp is Empty
+
+This setting controls how blank values from Mailchimp are handled during import:
+
+- **Checked**  
+  Counterpoint will **not** be updated with blank values from Mailchimp.  
+  This prevents scenarios where a customer leaves a field blank on a web-based sign-up form, unintentionally overwriting existing Counterpoint data.
+
+- **Unchecked**  
+  Allows existing Counterpoint values to be overwritten with blank values from Mailchimp.  
+  This setting is **not recommended**.
 
 ---
+## SECTION 5: Mailchimp Item Field Mapping  
+The Mailchimp connector now includes item field mapping support, allowing Counterpoint item data to be mapped to Mailchimp item attributes used during product and sales synchronization.
+This configuration defines how item-related fields from Counterpoint are sent to Mailchimp so that product details are available for reporting, segmentation, and ecommerce activity tracking.
 
-## Mailchimp Sync Status Codes
+### Item Field Mapping
+The following item mappings are configured:
 
-Each Mailchimp customer record includes a sync status value indicating its current state in the synchronization process.
+| Counterpoint Item Field | Mailchimp Item Attribute |
+|---|---|
+| `DESCR` | Description |
+| `ITEM_NO` | Id |
+| `DESCR` | Title |
+| `ATTR_COD_1` | Type |
+| `URL` | Url |
 
-| Status Code | Description                                                      |
-| ----------- | ---------------------------------------------------------------- |
-| `0`         | Fully synced; nothing pending                                    |
-| `1`         | Recently created or updated; will sync on the next connector run |
-| `2`         | Profile is currently in the active sync queue                    |
-| `5`         | Invalid email address                                            |
-| `6`         | Invalid SMS number                                               |
-| `9`         | Sync error; requires remediation before it can be re-synced      |
 
----
-
-## Add-on-the-Fly Mailchimp Customer Form (Optional)
-
-An optional **Mailchimp Customers Add-on-the-Fly** form can be configured to provide cashiers with limited access to Mailchimp customer records.
-
-If you are interested in a customized add-on-the-fly form for your company, please contact Rapid for pricing and availability.
-
-### Mailchimp Customer Tags
+## SECTION 6: Mailchimp Tags
 
 Mailchimp tags are simple labels that help organize and group contacts within an audience. Tags can be used to identify customers who meet specific criteria, such as earning a particular number of loyalty points or reaching a defined spending threshold.    
 
@@ -421,8 +468,6 @@ Once a tag is applied to a contact, it can be used in Mailchimp to:
 - Build segments based on tags  
 - Trigger automated journeys when a tag is added  
 
-### Mailchimp Tag Mapping
-
 The Mailchimp connector can automatically apply tags based on customer information stored in Counterpoint. During each sync, the connector evaluates each customer and determines which tags should apply based on a **custom condition filter** created for that specific rule.  
 
 Examples of tagging criteria include:
@@ -431,7 +476,7 @@ Examples of tagging criteria include:
 - Assigning a tag to customers whose total spending exceeds $1,000 
 
 Once the tagging criteria are defined, Rapid will review the requirements and provide a quote. After approval, a programmer will create the condition filter and add it to the Mailchimp Tag Mapping table.  
-<img width="1677" height="229" alt="image" src="https://github.com/user-attachments/assets/d65a10d7-8cf2-4adf-ad71-187f2b1a5565" />
+![Mailchimp Tag Mapping](./images/counterpoint-mailchimp-tag-mapping.png)
 
 Each condition filter checks the customer’s data in Counterpoint and evaluates whether the defined criteria are met. When the condition is satisfied, the connector applies the corresponding tag in Mailchimp. Each automated tag requires its own condition filter, written according to the rules provided for that tag. For example: 
 
@@ -449,11 +494,11 @@ Multiple automated tags may be configured. Viewing the Mailchimp Tag Mapping tab
 
 ![Mailchimp Customer Tag Mapping Example List](./images/counterpoint-mailchimp-tag-mapping-example-list.png)
 
-### Mailchimp Customer Tags
+## SECTION 7: Mailchimp Customer Tags  
 
 When a customer qualifies for a new tag, a record is created in the **Mailchimp Customer Tags** table. This table displays tags waiting to be synced, and each record remains visible until it is processed by the connector.
 
-<img width="1690" height="219" alt="image" src="https://github.com/user-attachments/assets/a09978db-1dab-458a-bbbc-8a0541f7e24a" />
+![Mailchimp Customer Tags Example](./images/counterpoint-mailchimp-customer-tags.png)
 
 ![Mailchimp Customer Tags Example](./images/counterpoint-mailchimp-customer-tags-example.png)
 
@@ -480,258 +525,173 @@ Please contact Rapid for assistance in defining tagging criteria or if a quote i
 
 ---
 
-## SECTION 2: Mailchimp Audiences and Contacts
+## SECTION 8: Mark All Mailchimp Messages as Read
 
-The Mailchimp Connector defines how your Counterpoint customer data interacts with Mailchimp. It ensures that your Mailchimp audience and contacts stay updated so that email campaigns always use the most current customer information.
+The **Mark All Mailchimp Messages as Read** menu option allows users to suppress repeated pop-up alerts in Counterpoint while retaining all Mailchimp connector messages for later review.
 
-### Audience
+This is especially useful in scenarios such as:
+- Repeated error messages following a temporary internet outage
+- High-volume alert conditions that have already been reviewed or acknowledged
 
-If a client already has an audience set up in Mailchimp, they can choose to use that existing audience for their Counterpoint connection.  
-- Mailchimp generally recommends maintaining **a single audience** so that each contact has one unified record.
-- Segmentation — through **tags, groups, or segments** — can then be used to organize and target contacts within that audience.
-
-If a client does not have an existing audience to use, the Mailchimp Connector will automatically create one titled **Counterpoint** during setup.
-
-Only the audience defined in the **Mailchimp configuration settings** will receive data from Counterpoint. Information will not sync to any other audiences in the Mailchimp account.
-
-In Mailchimp, when the same contact (based on email address) exists in multiple audiences, each audience treats that contact as a **separate record**.  
-- Each record receives a unique **Mailchimp ID** within its respective audience.  
-- The contact’s activity history, tags, merge fields, marketing permissions, and subscription status are tracked independently for each audience.
-
-It is generally recommended to use a single audience to prevent duplicate records; however, sometimes clients have a specific requirement to keep POS contacts separate from others. 
-
-### Contacts
-
-The connector pushes customer records from Counterpoint to Mailchimp **only** when the customer has a valid email address in **Email 1**.
-
-- If the **`Opt-Out of Email Marketing`** checkbox is **unchecked**, the customer is sent to Mailchimp as an **active contact** (subscribed).  
-- If the **`Opt-Out of Email Marketing`** checkbox is **checked**, the customer is sent to Mailchimp as an **opted-out contact**, meaning their email address will appear as **unsubscribed** across all Mailchimp lists.
-
-![Example of Counterpoint customer record](./images/counterpoint-customer-record-opt-out-flag.png)  
-
-
+Marking messages as read stops the pop-up notifications but does **not** delete the messages. All connector messages remain accessible in Counterpoint and can be reviewed at any time.
+### Mail Group ID Support for Counterpoint Messaging Accounts
 
 ---
 
-## SECTION 3: Ticket & Item Information
+## SECTION 9: Run Mailchimp Connector Button
 
-Mailchimp accepts a limited amount of customer sales information. Ticket data is sent to Mailchimp’s **Ecommerce** fields, as Mailchimp does not provide dedicated fields for POS data.
+The **Run Mailchimp Connector** menu option allows authorized users to manually trigger the Mailchimp Connector when needed. Manual execution is typically used for testing or troubleshooting and is not required during normal operation.
 
-### Ticket Header / Overall
-- Order Total  
-- Tax
+### How Manual Execution Works
 
-### Ticket Lines
-- Item Number  
-- Item Description 
-- Quantity Purchased  
-- Price
+When the **Run Mailchimp Connector** menu option is selected:
 
-### Items
-- Item Number  
-- Item Description _(Product Title)_
-- Item Category _(Can include combined values for Category + Subcategory + Vendor based on configuration options)_
-
-### Additional Customer Data
-- Total Number of Tickets for that customer  
-- Total Spent
-
-While Mailchimp supports **custom merge field mapping** for customer information, it **does not** support custom mapping for items. Only the values listed above can be sent.
-
-Only **posted tickets** are sent to Mailchimp. When a drawer is posted, the associated tickets are pushed to Mailchimp.
-
-If desired, during connector installation, previous sales history can be included during the initial sync. For example, you can choose to send sales data from the previous 60, 180, or 365 days.
-
-### Special Note on Mailchimp's Product Category Field
-The Mailchimp connector supports a custom configuration that combines **category**, **subcategory**, and **vendor** details from Counterpoint into Mailchimp’s single `product category` field (formerly the `product vendor` field). Review the configuration section of this document to learn more about this functionality.
-
----
-
-
-## SECTION 4: Connector Sync Process
-
-The Mailchimp Connector runs automatically every **15 minutes** to keep customer data synchronized between Counterpoint and Mailchimp.
-
-### Step 1: Update Unsubscribed Contacts
-
-The connector first retrieves every contact marked as **unsubscribed** in Mailchimp and sets the corresponding customer **opt-out flag** in Counterpoint.  
-
-This ensures that Mailchimp unsubscribes always take precedence, maintaining compliance with customer email preferences across both systems.
-
-### Step 2: Compare Subscription Status Changes
-
-Next, the connector retrieves a list of contacts in Mailchimp who have changed their subscription status — either **opted-in** or **opted-out** — since the last sync.  
-
-It then compares the **date and time** of each contact change in Mailchimp with the corresponding customer opt-in/out timestamp in Counterpoint.
-
-- If the customer was opted-out by a user in Counterpoint, they can be re-added to Mailchimp by unchecking the **“Opt-out from marketing emails”** flag in Counterpoint.  
-- If the customer unsubscribed via a Mailchimp link (for example, using the unsubscribe link in an email), Mailchimp will **not allow a resubscribe** initiated from Counterpoint.  
-  In this case, the `Opt-out from marketing emails` flag in Counterpoint will automatically be reset to **opted-out** during the next connector run.
-
-### Step 3: Sync *Updated and New* Customers *to* Mailchimp
-
-After processing subscription changes, the connector identifies all customers in Counterpoint who have been **added or modified** since the previous sync.  
-
-These records are pushed to Mailchimp, ensuring that existing Mailchimp contact information is updated with the latest data from Counterpoint.
-
-### Step 4: (Optional) Import *Updated and New* Customers *from* Mailchimp
-
-If enabled in your configuration, the connector can also **download customer updates** from Mailchimp into Counterpoint. This includes customers who have added or modified their information through a **website form**, **sign-up form**, or any other Mailchimp integration.
-
-- **New contacts** in Mailchimp are automatically matched or created in Counterpoint based on the **email address**.  
-- Changes to **existing contacts** in Mailchimp are updated in Counterpoint by matching on their **Mailchimp ID**.
-
----
-
-## SECTION 5: Common Customer Sync Questions
-
-Occasionally, two customers in Counterpoint may share the same email address, or a customer’s email address may be updated. The following explains how the connector handles various situations.
-
-### Multiple Customers with the Same Email Address
-
-When multiple customers share the same email address in Counterpoint, the connector prioritizes the customer who has already been synced to Mailchimp (the one with an existing **Mailchimp ID**).  
-
-The user will receive a message in Counterpoint indicating that the customer **without** a Mailchimp ID could not be synced due to the duplicate email address.
-
-If none of the customers have a Mailchimp ID yet, the connector will sync the customer with the **most recent last sale date** and skip the other customer record(s).
-
-### Merging Customer Records in Counterpoint
-
-When a user determines that two customer records in Counterpoint represent the same individual or business, those records can be merged into a single customer.
+- A **Manual Run Connector** action flag is set in the Mailchimp configuration.
+- The flag functions as a **one-time execution request** and remains enabled until it is processed by the connector.
+- Execution is handled in the background on the server (not on the workstation) to prevent overlapping executions.
   
-If both customers have previously been synced to Mailchimp, each record will already have its own **Mailchimp ID**.
+### Background Processing and Scheduling
 
-During the merge process, the **Mailchimp ID** associated with the “**To**” customer (the record being kept) is **retained**, while the **Mailchimp ID** from the “**From**” customer (the record being merged) is **discarded**.  
+A background process periodically checks for the **Manual Run Connector** action flag based on a configurable **CRON schedule** stored in the Klaviyo configuration.
 
-After the merge, the connector continues to sync using the retained Mailchimp ID.
+- The **Manual Run Connector Execution Time** schedule can be configured from the **Klaviyo Configuration** screen.
+- When the action flag is detected:
+  - If the Klaviyo connector is **not currently running**, it will execute for **all configured Klaviyo accounts**, typically within one minute.
+  - If the connector **is already running**, the system waits for the current execution to complete, then automatically restarts the connector for all configured Klaviyo accounts.
 
-### Updating an Existing Customer’s Email Address
+In both scenarios, the action flag is **automatically cleared** when execution begins.
 
-When a customer who has already been synced to Mailchimp updates their email address in Counterpoint, the connector automatically updates the corresponding Mailchimp contact based on the stored **Mailchimp ID**. This ensures the customer’s information is preserved in Mailchimp while simply replacing the old email address with the new one.
-
-However, if the newly entered email address in Counterpoint already exists in Mailchimp under a different contact, Mailchimp will prevent the update. **In this case, an error message will appear in the Counterpoint message center, and the email address for that Mailchimp profile will remain unchanged.**
-
----
-
-## SECTION 6: Troubleshooting and Sync Status Codes
-
-If a customer record is not syncing to Mailchimp, it is important to check their **Mailchimp Sync Status** in Counterpoint.  
-
-The sync status value indicates the current state of the customer’s record in the Mailchimp connector process.
-
-### Sync Status Codes
-
-| **Sync Status** | **Description** |
-|------------------|-----------------|
-| **0** | Customer has been synced to Mailchimp. |
-| **1** | Customer will be added to the sync queue during the next connector run. |
-| **2** | Customer is currently in the active sync queue. |
-| **5** | Customer has an invalid email address as determined by Mailchimp. |
-| **9** | Customer encountered an error during syncing and requires investigation. |
-
-### Viewing Sync Status in Counterpoint
-
-To view a customer’s sync status:
-
-1. Open the **Customer Lookup** screen in Counterpoint.  
-2. Use the **Column Designer** to add the `Mailchimp Stat` column. This column displays the current sync status value for each customer.
-
-![Example of Mailchimp connector sync stat column](./images/customer-lookup-mailchimp-stat-customer-examples.png)  
-
-### Filtering by Sync Status
-
-The **Customer Lookup** screen can also be filtered to display only customers with a specific Mailchimp status code.  
-
-This allows for quick identification and remediation of records that are queued, invalid, or have encountered sync errors.
-
-![Example of Mailchimp connector sync stat filter](./images/customer-lookup-mailchimp-stat-customer-filter.png)  
-
-### Comparing Mailchimp ID
-
-The contact profile Mailchimp ID is part of the profile's URL. This can be compared to the Mailchimp ID stored on the custom tab of the customer record in Counterpoint (and can be manually adjusted if necessary). 
-
-![Example of Mailchimp ID on the contact profile ID](./images/mailchimp-contact-profile-mailchimp-id.png)  
-
-![Example of Mailchimp ID on the custom tab of the customer record](./images/counterpoint-customer-record-custom-tab-mailchimp-id.png)  
+**Important:** Manual execution is intended primarily for **programmer-led testing or troubleshooting**, often when the connector has been **temporarily disabled**. It is not designed for routine operational use, as the connector runs automatically according to its configured schedule.
 
 ---
 
-## SECTION 7: Importing Customers from Mailchimp into Counterpoint
+## SECTION 10: Mailchimp Customer Status View
 
-The connector can be configured to import customers from Mailchimp into Counterpoint.  
+Each Mailchimp customer record includes a **sync status** that indicates its current state in the connector process. In some cases, it is helpful to review how many customer records fall into a particular status category.
 
-![Example of Mailchimp connector configuration for import customers](./images/counterpoint-mailchimp-connector-configuration-import-customers.png) 
+For example, you may want to identify that **43 customers have an invalid email address (status 5)** so those records can be reviewed and corrected.
 
-This feature is especially useful for automatically creating customer records in Counterpoint when users sign up through a **website form** or other Mailchimp-integrated source.
+The **Mailchimp Customer Status View** displays a summary table showing:
+- Each sync status code (0, 1, 2, 5, 6, 9)
+- The total number of customer records currently associated with that status
 
-### Limitations
+**Notes:**
+- If no customer records exist for a given status, that status will **not** appear in the table.
+- The table can be refreshed at any time to display the most up-to-date information.
+- This is best viewed in _table view_.
 
-The connector will **only import contacts** who belong to the **configured audience** in Mailchimp. Contacts outside of that audience will not be imported into Counterpoint.
+![Mailchimp Customer Status View](./images/Mailchimp-customer-status-view.png)
 
-### Caution Regarding Duplicate Customers
-
-If email addresses were not previously captured in Counterpoint, the connector has no way to match existing Counterpoint records with those imported from Mailchimp.  
-
-In this situation, **duplicate customer records** may be created. When duplicates are discovered, they can be manually merged using Counterpoint’s **Merge Customer Utility**.
-
-This issue is particularly important for clients who use **Driver License (DL) Scan** or clients who have to track sales by customer in a given time period (such as with firearm sales).  
-
-Consult with your **Business Analyst (BA)**, **Care Team**, or **Project Manager** before enabling this functionality—especially if DL Scan is in use.
-
-### Determining Which Fields to Import
-
-Carefully review and select the fields to import from Mailchimp into Counterpoint. Each field can be configured individually in the **Mailchimp Field Mapping** user interface. 
-
-For best results, always enable the flag `Retain Counterpoint Value if Mailchimp is Empty`.
-- This setting prevents overwriting existing data in Counterpoint with blank or missing values from Mailchimp.
-- For example, if `Phone 1` is populated in Counterpoint but empty in Mailchimp, the existing phone number will be preserved during import.
-
-![Example of Mailchimp connector field mapping for import customers](./images/counterpoint-mailchimp-connector-field-mapping-import-retain.png) 
-
-### Using the Template Customer
-
-By default, the workgroup 230 template customer record is set to `CRM_MLCHMP` and configured with **First Name** and **Last Name** values set to `*MISSING*`.
-
-This ensures that if these values are not provided in the Mailchimp contact, the connector will still import the email address and create the customer record in Counterpoint.  
-
-These imported customers can later be filtered and updated with correct names as needed.
-
-![Example of workgroup 230 CRM_MLCHMP template customer](./images/counterpoint-mailchimp-connector-template-customer-CRM_MLCHMP.png) 
-
-When `Skip Merge Validation` is **not** enabled in the configuration, these predefined `*MISSING*` values can also be sent back to Mailchimp to populate required fields that would otherwise prevent synchronization.
-- Note: Using Skip Merge Validation is highly recommended. 
-
-### First and Last Name vs. Business/Company Name
-
-When importing data from Mailchimp, if an existing customer record in Counterpoint is designated as a **Business** (name type = Business), the **First Name** and **Last Name** fields from Mailchimp will **not update/overwrite** the existing **business name** in Counterpoint.  
-
-This protects business names from being replaced with individual name data during the import process.
-
-
-
-## SECTION 9: Additional Mailchimp Tools
-
-Additional tools related to the Mailchimp connector can be accessed at **Counterpoint > Connectors > Mailchimp**.  
-
-<img width="1678" height="215" alt="image" src="https://github.com/user-attachments/assets/91d387b4-7ad7-49e0-91ed-edf984cf1a00" />
-
-### Mark All Mailchimp Messages as Read  
-If frequent pop-up alerts related to Mailchimp appear in Counterpoint, select **Mark All Mailchimp Messages as Read**.  
-
-This action suppresses the pop-ups while keeping the messages available for later review.  
-
-### Run Mailchimp Connector (Manual Execution)  
-The connector runs automatically every **15 minutes**. 
-
-For manual execution, select **Run Mailchimp Connector** in Counterpoint. A command window (black box) appears while the process runs; do not close it—the window closes automatically when the run completes.
-
-## Conclusion  
-
-The Rapid Mailchimp Connector streamlines the exchange of customer and sales data between Counterpoint and Mailchimp, keeping audiences accurate, subscription preferences respected, and campaigns targeted.
-
-Before go-live, review configuration settings and merge field mapping. After deployment, monitor sync status codes for invalid emails and report error messages as needed.
-
-For assistance with configuration changes, mapping, or troubleshooting, contact Rapid Support.  
+For details on the meaning of each customer sync status value, refer back to **SECTION 1: Mailchimp Customer Records**.
 
 ---
 
+## SECTION 11: Mailchimp Connector Execution and Sync Timing
+
+The Mailchimp Connector operates as a **Windows Service**, automatically syncing customer profiles and transactional documents between Counterpoint and Mailchimp.
+
+The connector runs continuously in the background and is responsible for keeping both systems aligned while respecting Mailchimp API rate limits and configured sync rules.
+
+### Sync Intervals
+
+The connector processes different types of data on separate schedules:
+
+- **Customer Profiles**  
+  New and updated customer profiles are synced every **15 minutes**.
+
+- **Documents in the Queue**  
+  Transactional documents are synced every **1 minute**.  
+  This interval is configurable and may be adjusted to prevent Mailchimp rate limiting.
+
+If a document being synced contains a **new customer**, the customer profile is created in Mailchimp **immediately as part of the document sync**. The connector does not wait for the next 15-minute customer profile sync cycle.
+
+For details on how customer profile changes are evaluated and synchronized between Mailchimp and Counterpoint, refer to **SECTION 13: Customer Profile Sync Logic and Workflow**.
+
+---
+
+## SECTION 12: Customer Profile Sync Logic and Workflow
+
+This section describes the logical order and decision-making process used by the connector after a sync cycle begins.
+
+The Mailchimp Connector processes customer profile updates in a defined sequence to ensure that the most recent and authoritative data is preserved between Counterpoint and Mailchimp.
+
+### Step 1: Sync Changes from Mailchimp Down to Counterpoint
+
+The connector first retrieves profile changes made in Mailchimp and evaluates whether those changes should be applied to Counterpoint.
+
+- The connector compares the **date and time** of the most recent profile change in Mailchimp to the **date and time** of the most recent update in Counterpoint.
+- The system uses the values from the source with the **most recent timestamp**.
+
+Behavior depends on configuration settings:
+
+- If **Insert/Update Customers** is **enabled**, all configured fields are synced down from Mailchimp to Counterpoint.
+- If **Insert/Update Customers** is **disabled**, only **subscription status changes** are synced down.
+
+### Step 2: Sync Changes from Counterpoint Up to Mailchimp
+
+After processing inbound changes, the connector identifies customer records in Counterpoint that have been **created or modified** since the previous sync.
+
+These updates are then pushed up to Mailchimp, ensuring that Mailchimp profiles reflect the most current customer information stored in Counterpoint.
+
+---
+
+## SECTION 13: Managing Customer Email and Phone Updates
+
+When a customer is synced to Mailchimp, the connector stores the associated **Mailchimp Profile ID** on the customer record in Counterpoint. This Profile ID becomes the permanent link between the Counterpoint customer and the Mailchimp profile and is used for all future updates.  
+
+Using the Profile ID ensures that customer history, engagement data, events, and flow activity are preserved in Mailchimp even when identifying information changes.
+
+### Updating Email Address and Phone Number
+
+If **Email Address 1** or the configured phone number (**Mobile Phone 1** or **Phone 1**) is updated in Counterpoint for a customer who already has a Mailchimp profile:
+
+- The connector updates the email address or phone number on the **existing Mailchimp Profile ID**.
+- A new Mailchimp profile is **not** created.
+- The customer retains their full Mailchimp history, including events, metrics, and flow participation.
+
+This behavior ensures continuity in Mailchimp while allowing customer contact information to be updated over time.
+
+### Handling Duplicate Customer Records
+
+The Mailchimp Connector enforces strict rules to prevent **duplicate Mailchimp profiles** and to maintain data integrity. Because Mailchimp profiles are uniquely identified by email address (per Mailchimp account), a single email address can only be associated with **one** Counterpoint customer record for that account.
+
+The following scenarios describe how the connector behaves.
+
+#### Scenario 1: Duplicate Email Addresses Already Exist in Counterpoint During Initial Setup
+
+If the connector is installed and **multiple Counterpoint customers already share the same Email Address 1**:
+
+- The connector creates or associates **one** Mailchimp profile for that email address.
+- Only one Counterpoint customer record can be linked to that Mailchimp profile.
+- Any additional Counterpoint customers using the same email address will **not** be able to create or associate their own Mailchimp customer record for that email address.
+
+This behavior is expected and prevents duplicate Mailchimp profiles from being created during initial deployment.
+
+#### Scenario 2: A Mailchimp Customer Record Already Exists and the Same Email Is Assigned to Another Counterpoint Customer
+
+If a Mailchimp customer record already exists in Counterpoint for a given email address, and a user attempts to assign that **same Email Address 1** to a different Counterpoint customer record (either by editing an existing customer or creating a new one):
+
+- Counterpoint blocks the action.
+- An error is returned to the user.
+- The connector does **not** allow a second Counterpoint customer to be linked to the same Mailchimp profile.
+
+This prevents multiple Counterpoint customer records from sharing a single Mailchimp profile.
+
+### Handling Merged Customers in Counterpoint
+
+When two customer records are merged in Counterpoint:
+
+- The Mailchimp customer record associated with the **“To”** customer (the retained record) remains linked to the Mailchimp profile.
+- If the **“From”** customer had an associated Mailchimp customer record, that record becomes detached from any active customer.
+
+It is recommended to **manually delete** the detached Mailchimp customer record after the merge. Otherwise, it will remain in Counterpoint with no functional association to an active Mailchimp profile.
+
+---
+
+## Conclusion
+
+The Rapid Mailchimp Connector streamlines the exchange of customer profiles and transactional data between Counterpoint and Mailchimp, enabling powerful email and SMS marketing, accurate segmentation, and automated flows.
+
+Before go-live, review configuration settings, field mappings, and list configurations to ensure customer data and subscription preferences are handled correctly. After deployment, monitor customer and document sync status views to identify invalid data or records requiring remediation.
+
+For assistance with configuration changes, custom field mapping, event setup, or troubleshooting, contact Rapid Support.  
