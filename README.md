@@ -28,7 +28,7 @@ If you would like the Mailchimp connector but your system does not meet these mi
 - [SECTION 2: Mailchimp Configuration](#section-2-mailchimp-configuration)
 - [SECTION 3: Mailchimp Field Mapping - Customers Up](#section-3-mailchimp-field-mapping---customers-up)
 - [SECTION 4: Mailchimp Field Mapping – Customers Down](#section-4-mailchimp-field-mapping--customers-down)
-- [SECTION 5: Mailchimp Item Field Mapping](#section-5-mailchimp-item-field-mapping)
+- [SECTION 5: Mailchimp Item Field Mapping & Ticket Information](#section-5-mailchimp-item-field-mapping--ticket-information)
 - [SECTION 6: Mailchimp Tags](#section-6-mailchimp-tags)
 - [SECTION 7: Mailchimp Customer Tags](#section-7-mailchimp-customer-tags)
 - [SECTION 8: Mark All Mailchimp Messages as Read](#section-8-mark-all-mailchimp-messages-as-read)
@@ -445,8 +445,8 @@ This setting controls how blank values from Mailchimp are handled during import:
   This setting is **not recommended**.
 
 ---
-## SECTION 5: Mailchimp Item Field Mapping  
-The Mailchimp connector now includes item field mapping support, allowing Counterpoint item data to be mapped to Mailchimp item attributes used during product and sales synchronization.
+## SECTION 5: Mailchimp Item Field Mapping & Ticket Information
+Mailchimp accepts a limited amount of customer sales information. Ticket data is sent to Mailchimp’s Ecommerce fields, as Mailchimp does not provide dedicated fields for POS data.
 This configuration defines how item-related fields from Counterpoint are sent to Mailchimp so that product details are available for reporting, segmentation, and ecommerce activity tracking.
 
 ### Item Field Mapping
@@ -454,15 +454,28 @@ The following item mappings are configured:
 
 ![Mailchimp Item Field Mapping](./images/counterpoint-mailchimp-item-field-mapping.png)
 
-## SECTION 6: Mailchimp Tags
+### Ticket Header / Overall
+- Order Total  
+- Tax
 
-Mailchimp tags are simple labels that help organize and group contacts within an audience. Tags can be used to identify customers who meet specific criteria, such as earning a particular number of loyalty points or reaching a defined spending threshold.    
+### Ticket Lines
+- Item Number  
+- Item Description 
+- Quantity Purchased  
+- Price
 
-Once a tag is applied to a contact, it can be used in Mailchimp to:  
+### Additional Customer Data
+- Total Number of Tickets for that customer  
+- Total Spent
 
-- Send campaigns directly to tagged contacts  
-- Build segments based on tags  
-- Trigger automated journeys when a tag is added  
+Only **posted tickets** are sent to Mailchimp. When a drawer is posted, the associated tickets are pushed to Mailchimp.
+
+If desired, during connector installation, previous sales history can be included during the initial sync. For example, you can choose to send sales data from the previous 60, 180, or 365 days.
+
+### Special Note on Mailchimp's Product Category Field
+The Mailchimp connector supports a custom configuration that combines **category**, **subcategory**, and **vendor** details from Counterpoint into Mailchimp’s single `product category` field (formerly the `product vendor` field). Review the configuration section of this document to learn more about this functionality.
+
+## SECTION 6: Mailchimp Tag Mapping
 
 The Mailchimp connector can automatically apply tags based on customer information stored in Counterpoint. During each sync, the connector evaluates each customer and determines which tags should apply based on a **custom condition filter** created for that specific rule.  
 
