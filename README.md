@@ -52,7 +52,7 @@ Depending on configuration, the SMS phone number is populated from either **Phon
 
 If the configured phone number field contains more than or fewer than 10 digits, or if it includes letters, the SMS number will **not** be pushed to Mailchimp.
 
-![Mailchimp Customer Record](./images/counterpoint-klaviyo-customer-record.png)
+![Mailchimp Customer Record](./images/counterpoint-mailchimp-customer-record.png)
 
 ### Accessing Mailchimp Customer Records
 
@@ -63,6 +63,264 @@ All Mailchimp customer records can also be accessed from:
 This view allows records to be displayed in **table view**, where filters can be applied to review customers based on their current sync status.
 
 ![Mailchimp Customers in Table View](./images/counterpoint-mailchimp-customers-table-view.png)
+
+### Mailchimp Sync Status Codes
+
+Each Mailchimp customer record includes a sync status value indicating its current state in the sync process:
+
+- **0** – Fully synced; nothing pending  
+- **1** – Recently created or updated; will sync on the next connector run  
+- **2** – Profile is currently in the active sync queue  
+- **5** – Invalid email address  
+- **6** – Invalid SMS number  
+- **9** – Sync error; requires remediation before it can be re-synced  
+
+### Add-on-the-Fly Mailchimp Customer Form (Optional)
+
+An optional **Mailchimp Customers Add-on-the-Fly** form can be configured to give cashiers limited access to Mailchimp customer records, if desired.
+
+Please contact Rapid for a quote if you are interested in a customized add-on-the-fly form for your company.
+
+---
+## SECTION 2: Mailchimp Configuration
+
+The Mailchimp connector includes several configuration options that control how it interacts with Mailchimp and Counterpoint. These settings should be reviewed carefully during setup and adjusted only when necessary. All configuration settings are managed in **Counterpoint > Connectors > Mailchimp > Mailchimp Configuration**. 
+
+![Mailchimp Customers in Table View](./images/counterpoint-mailchimp-configuration.png)
+
+For clients who use **multiple Mailchimp accounts**, a separate configuration record will exist for each account.
+
+### Account Name
+- Identifies the Mailchimp account.
+- This setting is especially important for companies with more than one Mailchimp account (for example, separate accounts for a retail store and a restaurant).
+
+### Is Enabled?
+- Used to temporarily disable the connector while troubleshooting or testing.
+
+### API Key
+- The API Key identifies the Mailchimp account and provides the authentication credentials required for the connector to communicate with Mailchimp.
+- Rapid will populate this field during installation.
+
+### Last Sync Date (UTC)
+- Displays the timestamp of the most recent connector run.
+- This value is automatically updated after each sync and is used to determine which records have changed since the last sync.
+
+### Workgroup ID
+- Specifies which Counterpoint Workgroup ID should be used when creating new customers imported from Mailchimp.
+- This will be a special workgroup for the Mailchimp connector so that a custom `CRM_MLCHMP` customer template can be used if needed.
+
+  > **Default:** `230` (Mailchimp Connector)
+- This value should typically remain unchanged unless otherwise instructed by Rapid.
+
+### Mailchimp Store ID and Store Name
+- Each Mailchimp connector instance is associated with a Mailchimp Store ID and Mailchimp Store Name.
+- These store settings in Mailchimp are used for syncing sales data labeled as coming from Counterpoint (as opposed to other sources such as a separate ecommerce integration).
+
+  > **Default Value:** `Counterpoint`
+- These values typically should not be changed.
+
+### User ID
+- Defines the Counterpoint User ID that will be assigned to new customers imported from Mailchimp (only if customer import is enabled).
+
+  > **Default:** `CRM_MLCHMP`
+- This ensures all imported records are attributed to the designated Mailchimp connector user.
+
+### Version
+- Displays the current version of the Mailchimp connector.
+- This field updates automatically when the connector is upgraded and is provided for reference only.
+
+### Customer Lookup Days
+- Defines the number of days subtracted from the current date when retrieving customer profiles from Mailchimp.
+- This adjustment helps compensate for timezone differences and ensures recently updated customer records are included during synchronization.
+
+### Auto Create Mailchimp Profile
+Controls when Mailchimp customer records are automatically created from Counterpoint.
+
+- **EMAIL ONLY**
+  A Mailchimp customer record is automatically created when a customer is added to Counterpoint with **Email Address 1**.
+- If the configured phone number (**Mobile Phone 1** or **Phone 1**) is also present, it will be included on the Mailchimp profile.
+- SMS subscription configuration is handled separately.
+
+- **NO**
+  Mailchimp customer records must be created manually.
+
+- **BOTH**
+  A Mailchimp customer record is automatically created only when both:
+
+- **Note:**  
+  **SMS ONLY** is currently a placeholder for potential future development. At this time, **all customers must have an email address** to be synced to Mailchimp.
+
+### Audience ID
+
+Mailchimp organizes contacts within **Audiences** (formerly known as lists).
+
+This field identifies the specific audience to which connector data will sync.
+
+The Audience ID is established during setup and should not be modified unless a new audience is being used.
+
+### Insert New Customer Records
+
+Controls whether Mailchimp profiles can create new Counterpoint customer records.
+
+### Checked
+
+Mailchimp profiles that do not match an existing Counterpoint customer will be inserted into Counterpoint.
+
+Customer records are created using fields configured in **Mailchimp Field Mapping – Customers Down** with an **Insert** action.
+
+This option is commonly used when customer data originates from website sign-up forms.
+
+#### Matching Logic
+
+The connector attempts to match records using:
+
+* Mailchimp Profile ID
+* Email Address 1
+
+If no match is found in either:
+
+* Counterpoint customer records (`AR_CUST`)
+* Mailchimp customer records (`USER_MAILCHIMP_CUST`)
+
+a new Counterpoint customer record is created.
+
+All profiles changed since the last sync are evaluated, regardless of Mailchimp audience membership.
+
+### Unchecked
+
+New Counterpoint customer records will not be created by the connector.
+
+### Important Notes
+
+* Updating existing Counterpoint customer records is **independent** of this setting. Refer to **Mailchimp Field Mapping – Customers Down**.
+* Importing customers can result in **duplicate records** if email addresses were not previously captured in Counterpoint.
+* Duplicates can be merged manually, but this can be especially problematic for clients using **DL Scan** or **3310 forms**.
+* Consult with your **Business Analyst**, **vCIO**, or **Project Manager** before enabling this feature.
+
+### Skip Merge Validation
+
+Some clients configure **required merge fields** in Mailchimp, often to enforce required fields on website sign-up forms.
+
+When those fields are missing values in Counterpoint, Mailchimp normally rejects the sync and returns an error.
+
+Enabling **Skip Merge Validation** allows the connector to:
+
+* Bypass merge field validation
+* Force the customer record to sync
+
+This prevents missing fields from blocking synchronization.
+
+### Customer Filter
+
+SQL query configuration used to filter and select customer records for synchronization to Mailchimp.
+
+### Capitalize Customer Fields Configuration Setting
+
+Supports automatic capitalization of customer fields during synchronization and processing.
+
+### Checked
+
+Customer information, including names and address-related fields, is automatically converted to uppercase formatting to maintain data consistency between Counterpoint and Mailchimp customer records.
+
+### Unchecked
+
+Customer information is synchronized using the original text formatting without automatic capitalization.
+
+### Auto Opt-In by Default
+
+Optional automation designed to reduce manual steps during customer creation.
+
+### Checked
+
+The opt-in box is automatically flagged when creating a new Mailchimp customer record.
+
+### Unchecked
+
+The opt-in box must be manually selected.
+
+### Opt-In Definition
+
+Currently, the only supported opt-in definition is:
+
+* `Subscribed`
+
+### Opt-Out Definition
+
+Currently, the only supported opt-out definition is:
+
+* `Subscribed`
+
+### SMS # for Mailchimp
+
+Defines which Counterpoint customer phone number field is used to populate the Mailchimp **SMS Number – Mobile Phone** profile property.
+
+### Supported Options
+
+* Mobile Phone 1
+* Phone 1
+
+If the selected phone field does not meet the requirement of **exactly 10 numeric digits**, the phone number will not be sent to Mailchimp.
+
+> This setting controls which phone number is populated and does **not** control SMS subscription consent.
+
+### SMS Country Code
+
+Mailchimp requires all SMS phone numbers to include a country code.
+
+### Examples
+
+* `+1` — United States and Canada
+* `+52` — Mexico
+
+### Send Sales  
+When enabled, the connector pushes sales data from Counterpoint to Mailchimp, allowing sales activity to be used for audience segmentation, reporting, or targeted marketing.  
+- If disabled, only customer data will sync.
+
+### Start Date Days  
+Defines how many days of historical sales data should be pushed during the **initial** sync.  
+- The default value is **-60 days**, meaning that sales from the past 60 days will be pushed to Mailchimp during the first sync. However, this value can be adjusted as desired.
+
+### Product Category, Subcategory, and Vendor Type  
+Mailchimp provides only a **single product category field** (previously referred to as the *product vendor* field). Some clients choose to include additional item details — such as **category**, **subcategory**, or **vendor** — in this field to enhance reporting and segmentation in Mailchimp.
+
+Because Mailchimp does not support multiple fields for these values, Rapid developed a **workaround** that combines all three into the single **Category** field available in Mailchimp. This approach allows for more flexible audience segmentation but requires awareness of how combined data impacts filtering and search behavior.
+
+>**Example of combined values:**  
+>
+>| **Field** | **Description** | **Code** |
+>|------------|-------------------------------|------------------------|
+>| Category | `Fruits & Vegetables` | `FRUIT&VEG` |
+>| Subcategory | `Tropical Fruits` | `TROPFRUITS` |
+>| Vendor | `Golden Grove Company` | `GOLDENGROVE` |
+
+When combined, these values are sent to Mailchimp as a single entry in Mailchimp's Category field.
+
+Example of all three values sent as description: `Fruits & Vegetables/Tropical Fruits/Golden Grove Company`  
+
+![Example of all three values sent as description](./images/segment-builder-category-is-descriptions.png)  
+
+Example of all three values sent as code: `FRUIT&VEG/TROPFRUITS/GOLDENGROVE`  
+
+![Example of all three values sent as code](./images/segment-builder-category-is-codes.png)  
+
+Example of only category sent as a code: `FRUIT&VEG`  
+
+![Example of one value sent as code](./images/segment-builder-category-is-code-single-value.png)  
+
+When the configuration is defined, consideration should be given to how segments will be created in Mailchimp:
+- For **specific filtering** (e.g., *Category **equals** Tropical Fruits*), sending a single data type — such as only category or only subcategory — produces the most precise results.  
+- For **broader filtering** (e.g., *Category **contains** “Fruit”*), combined category, subcategory, and vendor values may **all** contribute to the match.  
+  - In this scenario, filtering for *contains “Fruit”* would return any record where the word “Fruit” appears in **any** portion of the combined field.
+
+Example of filtering using the operator **contains**:  
+
+![Example of filtering by contains](./images/segment-builder-category-contains.png)  
+
+
+### Internal Configuration Options  
+Additional internal configuration options exist within the connector. These are primarily used by programmers to optimize performance or to assist in troubleshooting. These values should not be adjusted by end users.
+
+---
 
 ### Mailchimp Field Mapping
 
@@ -450,280 +708,7 @@ When importing data from Mailchimp, if an existing customer record in Counterpoi
 
 This protects business names from being replaced with individual name data during the import process.
 
-## SECTION 8: Configuration
 
-# Mailchimp Connector Configuration Settings
-
-The Mailchimp connector includes several configuration options that control how it interacts with Mailchimp and Counterpoint. These settings should be reviewed carefully during setup and adjusted only when necessary. All configuration settings are managed in **Counterpoint > Connectors > Mailchimp > Mailchimp Configuration**. 
-
-<img width="1681" height="213" alt="image" src="https://github.com/user-attachments/assets/23b2851f-42a7-481b-9595-8b66def7e517" />
-
-For clients who use **multiple Mailchimp accounts**, a separate configuration record will exist for each account.
-
-<img width="729" height="709" alt="image" src="https://github.com/user-attachments/assets/0706994b-0a33-4059-9f7b-e461d5996508" />
-
----
-
-### Account Name
-
-Identifies the Mailchimp account.
-
-This setting is especially important for companies with more than one Mailchimp account (for example, separate accounts for a retail store and a restaurant).
-
-### Is Enabled?
-
-Used to temporarily disable the connector while troubleshooting or testing.
-
-### API Key
-
-The API Key identifies the Mailchimp account and provides the authentication credentials required for the connector to communicate with Mailchimp.
-
-Rapid will populate this field during installation.
-
-### Last Sync Date (UTC)
-
-Displays the timestamp of the most recent connector run.
-
-This value is automatically updated after each sync and is used to determine which records have changed since the last sync.
-
-### Workgroup ID
-
-Specifies which Counterpoint Workgroup ID should be used when creating new customers imported from Mailchimp.
-
-This will be a special workgroup for the Mailchimp connector so that a custom `CRM_MLCHMP` customer template can be used if needed.
-
-> **Default:** `230` (Mailchimp Connector)
-
-This value should typically remain unchanged unless otherwise instructed by Rapid.
-
-### Mailchimp Store ID and Store Name
-
-Each Mailchimp connector instance is associated with a Mailchimp Store ID and Mailchimp Store Name.
-
-These store settings in Mailchimp are used for syncing sales data labeled as coming from Counterpoint (as opposed to other sources such as a separate ecommerce integration).
-
-> **Default Value:** `Counterpoint`
-
-These values typically should not be changed.
-
-### User ID
-
-Defines the Counterpoint User ID that will be assigned to new customers imported from Mailchimp (only if customer import is enabled).
-
-> **Default:** `CRM_MLCHMP`
-
-This ensures all imported records are attributed to the designated Mailchimp connector user.
-
-### Version
-
-Displays the current version of the Mailchimp connector.
-
-This field updates automatically when the connector is upgraded and is provided for reference only.
-
-### Customer Lookup Days
-
-Defines the number of days subtracted from the current date when retrieving customer profiles from Mailchimp.
-
-This adjustment helps compensate for timezone differences and ensures recently updated customer records are included during synchronization.
-
-### Auto Create Mailchimp Profile
-
-Controls when Mailchimp customer records are automatically created from Counterpoint.
-
-### EMAIL ONLY
-
-A Mailchimp customer record is automatically created when a customer is added to Counterpoint with **Email Address 1**.
-
-If the configured phone number (**Mobile Phone 1** or **Phone 1**) is also present, it will be included on the Mailchimp profile.
-
-SMS subscription configuration is handled separately.
-
-### NO
-
-Mailchimp customer records must be created manually.
-
-### BOTH
-
-A Mailchimp customer record is automatically created only when both:
-
-* **Email Address 1**
-* The configured phone number (**Mobile Phone 1** or **Phone 1**)
-
-are present.
-
-> **Note:** `SMS ONLY` is currently a placeholder for potential future development. At this time, **all customers must have an email address** to be synced to Mailchimp.
-
-### Audience ID
-
-Mailchimp organizes contacts within **Audiences** (formerly known as lists).
-
-This field identifies the specific audience to which connector data will sync.
-
-The Audience ID is established during setup and should not be modified unless a new audience is being used.
-
-### Insert New Customer Records
-
-Controls whether Mailchimp profiles can create new Counterpoint customer records.
-
-### Checked
-
-Mailchimp profiles that do not match an existing Counterpoint customer will be inserted into Counterpoint.
-
-Customer records are created using fields configured in **Mailchimp Field Mapping – Customers Down** with an **Insert** action.
-
-This option is commonly used when customer data originates from website sign-up forms.
-
-#### Matching Logic
-
-The connector attempts to match records using:
-
-* Mailchimp Profile ID
-* Email Address 1
-
-If no match is found in either:
-
-* Counterpoint customer records (`AR_CUST`)
-* Mailchimp customer records (`USER_MAILCHIMP_CUST`)
-
-a new Counterpoint customer record is created.
-
-All profiles changed since the last sync are evaluated, regardless of Mailchimp audience membership.
-
-### Unchecked
-
-New Counterpoint customer records will not be created by the connector.
-
-### Important Notes
-
-* Updating existing Counterpoint customer records is **independent** of this setting. Refer to **Mailchimp Field Mapping – Customers Down**.
-* Importing customers can result in **duplicate records** if email addresses were not previously captured in Counterpoint.
-* Duplicates can be merged manually, but this can be especially problematic for clients using **DL Scan** or **3310 forms**.
-* Consult with your **Business Analyst**, **vCIO**, or **Project Manager** before enabling this feature.
-
-### Skip Merge Validation
-
-Some clients configure **required merge fields** in Mailchimp, often to enforce required fields on website sign-up forms.
-
-When those fields are missing values in Counterpoint, Mailchimp normally rejects the sync and returns an error.
-
-Enabling **Skip Merge Validation** allows the connector to:
-
-* Bypass merge field validation
-* Force the customer record to sync
-
-This prevents missing fields from blocking synchronization.
-
-### Customer Filter
-
-SQL query configuration used to filter and select customer records for synchronization to Mailchimp.
-
-### Capitalize Customer Fields Configuration Setting
-
-Supports automatic capitalization of customer fields during synchronization and processing.
-
-### Checked
-
-Customer information, including names and address-related fields, is automatically converted to uppercase formatting to maintain data consistency between Counterpoint and Mailchimp customer records.
-
-### Unchecked
-
-Customer information is synchronized using the original text formatting without automatic capitalization.
-
-### Auto Opt-In by Default
-
-Optional automation designed to reduce manual steps during customer creation.
-
-### Checked
-
-The opt-in box is automatically flagged when creating a new Mailchimp customer record.
-
-### Unchecked
-
-The opt-in box must be manually selected.
-
-### Opt-In Definition
-
-Currently, the only supported opt-in definition is:
-
-* `Subscribed`
-
-### Opt-Out Definition
-
-Currently, the only supported opt-out definition is:
-
-* `Subscribed`
-
-### SMS # for Mailchimp
-
-Defines which Counterpoint customer phone number field is used to populate the Mailchimp **SMS Number – Mobile Phone** profile property.
-
-### Supported Options
-
-* Mobile Phone 1
-* Phone 1
-
-If the selected phone field does not meet the requirement of **exactly 10 numeric digits**, the phone number will not be sent to Mailchimp.
-
-> This setting controls which phone number is populated and does **not** control SMS subscription consent.
-
-### SMS Country Code
-
-Mailchimp requires all SMS phone numbers to include a country code.
-
-### Examples
-
-* `+1` — United States and Canada
-* `+52` — Mexico
-
-### Send Sales  
-When enabled, the connector pushes sales data from Counterpoint to Mailchimp, allowing sales activity to be used for audience segmentation, reporting, or targeted marketing.  
-- If disabled, only customer data will sync.
-
-### Start Date Days  
-Defines how many days of historical sales data should be pushed during the **initial** sync.  
-- The default value is **-60 days**, meaning that sales from the past 60 days will be pushed to Mailchimp during the first sync. However, this value can be adjusted as desired.
-
-### Product Category, Subcategory, and Vendor Type  
-Mailchimp provides only a **single product category field** (previously referred to as the *product vendor* field). Some clients choose to include additional item details — such as **category**, **subcategory**, or **vendor** — in this field to enhance reporting and segmentation in Mailchimp.
-
-Because Mailchimp does not support multiple fields for these values, Rapid developed a **workaround** that combines all three into the single **Category** field available in Mailchimp. This approach allows for more flexible audience segmentation but requires awareness of how combined data impacts filtering and search behavior.
-
->**Example of combined values:**  
->
->| **Field** | **Description** | **Code** |
->|------------|-------------------------------|------------------------|
->| Category | `Fruits & Vegetables` | `FRUIT&VEG` |
->| Subcategory | `Tropical Fruits` | `TROPFRUITS` |
->| Vendor | `Golden Grove Company` | `GOLDENGROVE` |
-
-When combined, these values are sent to Mailchimp as a single entry in Mailchimp's Category field.
-
-Example of all three values sent as description: `Fruits & Vegetables/Tropical Fruits/Golden Grove Company`  
-
-![Example of all three values sent as description](./images/segment-builder-category-is-descriptions.png)  
-
-Example of all three values sent as code: `FRUIT&VEG/TROPFRUITS/GOLDENGROVE`  
-
-![Example of all three values sent as code](./images/segment-builder-category-is-codes.png)  
-
-Example of only category sent as a code: `FRUIT&VEG`  
-
-![Example of one value sent as code](./images/segment-builder-category-is-code-single-value.png)  
-
-When the configuration is defined, consideration should be given to how segments will be created in Mailchimp:
-- For **specific filtering** (e.g., *Category **equals** Tropical Fruits*), sending a single data type — such as only category or only subcategory — produces the most precise results.  
-- For **broader filtering** (e.g., *Category **contains** “Fruit”*), combined category, subcategory, and vendor values may **all** contribute to the match.  
-  - In this scenario, filtering for *contains “Fruit”* would return any record where the word “Fruit” appears in **any** portion of the combined field.
-
-Example of filtering using the operator **contains**:  
-
-![Example of filtering by contains](./images/segment-builder-category-contains.png)  
-
-
-### Internal Configuration Options  
-Additional internal configuration options exist within the connector. These are primarily used by programmers to optimize performance or to assist in troubleshooting. These values should not be adjusted by end users.
-
----
 
 ## SECTION 9: Additional Mailchimp Tools
 
