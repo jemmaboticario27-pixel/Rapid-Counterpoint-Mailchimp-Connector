@@ -348,17 +348,18 @@ Calculated fields are not included by default. Any request to add calculated fie
 The following customer fields are included in a standard Mailchimp connector deployment:
 
 1. Email 1 _(Required and hard-coded, not included in the mapping table)_
-2. Customer Number *  _(Strongly recommended)_
-3. First Name  
-4. Last Name  
-5. Full Address _(Address + City + State + Zip)_  
-6. Zip Code *  
-7. Phone 1 
-8. Customer Category  
-9. First Sale Date  
-10. Last Sale Date  
-11. Loyalty Point Balance  
-12. A/R Account Balance
+2. SMS _(If SMS is configured, hard-coded, not included in the mapping table)_
+3. Customer Number *  _(Strongly recommended)_
+4. First Name  
+5. Last Name  
+6. Full Address _(Address + City + State + Zip)_  
+7. Zip Code *  
+8. Phone 1 
+9. Customer Category  
+10. First Sale Date  
+11. Last Sale Date  
+12. Loyalty Point Balance  
+13. A/R Account Balance
 
 \* Must be sent as **merge field column type = default.**
 
