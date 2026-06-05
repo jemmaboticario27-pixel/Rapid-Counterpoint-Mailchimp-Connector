@@ -24,16 +24,19 @@ If you would like the Mailchimp connector but your system does not meet these mi
 ## Table of Contents
 
 - [Minimum System Requirements](#minimum-system-requirements)
-- [Section 1: Mailchimp Customer Records](#section-1-mailchimp-customer-records)
-- [Section 2: Mailchimp Configuration](#section-2-mailchimp-configuration)
-- [Section 3: Mailchimp Field Mapping – Customers Up](#section-3-mailchimp-field-mapping--customers-up)
-- [Section 4: Mailchimp Field Mapping – Customers Down](#section-4-mailchimp-field-mapping--customers-down)
-- [Section 5: Mailchimp Audiences and Contacts](#section-1-mailchimp-audiences-and-contacts)
-- [Section 6: Ticket & Item Information](#section-3-ticket--item-information)
-- [Section 7: Mailchimp Customer Status View](#section-9-mailchimp-customer-status-view)
-- [Section 8: Run Mailchimp Connector Button](#section-10-run-mailchimp-connector-button)
-- [Section 9: Mark All Mailchimp Messages as Read](#section-11-mark-all-mailchimp-messages-as-read)
-- [Section 10: Mailchimp Connector Execution and Sync Timing](#section-12-mailchimp-connector-execution-and-sync-timing)
+- [SECTION 1: Mailchimp Customer Records](#section-1-mailchimp-customer-records)
+- [SECTION 2: Mailchimp Configuration](#section-2-mailchimp-configuration)
+- [SECTION 3: Mailchimp Field Mapping – Customers Up](#section-3-mailchimp-field-mapping--customers-up)
+- [SECTION 4: Mailchimp Field Mapping – Customers Down](#section-4-mailchimp-field-mapping--customers-down)
+- [SECTION 5: Mailchimp Item Field Mapping](#section-1-mailchimp-audiences-and-contacts)
+- [SECTION 6: Mailchimp Tag Mapping](#section-3-ticket--item-information)
+- [SECTION 7: Mailchimp Customer Tags](#section-9-mailchimp-customer-status-view)
+- [SECTION 8: Mark All Mailchimp Messages as Read](#section-11-mark-all-mailchimp-messages-as-read)
+- [SECTION 9: Run Mailchimp Connector Button](#section-10-run-mailchimp-connector-button)
+- [SECTION 10: Mailchimp Customer Status View(#section-11)]
+- [SECTION 11: Mailchimp Connector Execution and Sync Timing](#section-12-mailchimp-connector-execution-and-sync-timing)
+- [SECTION 12: Mailchimp Connector Execution and Sync Timing]
+- Mailchimp Connector Execution and Sync Timing
 - [Conclusion](#conclusion)
 
 ---
