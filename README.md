@@ -136,35 +136,35 @@ For clients who use **multiple Mailchimp accounts**, a separate configuration re
 ### Auto Create Mailchimp Profile
 Controls when Mailchimp customer records are automatically created from Counterpoint.
 
-- **EMAIL ONLY**
+- **EMAIL ONLY**  
   A Mailchimp customer record is automatically created when a customer is added to Counterpoint with **Email Address 1**.
-- If the configured phone number (**Mobile Phone 1** or **Phone 1**) is also present, it will be included on the Mailchimp profile.
-- SMS subscription configuration is handled separately.
+  - If the configured phone number (**Mobile Phone 1** or **Phone 1**) is also present, it will be included on the Mailchimp profile.
+  - SMS subscription configuration is handled separately.
 
-- **NO**
+- **NO**  
   Mailchimp customer records must be created manually.
 
-- **BOTH**
+- **BOTH**  
   A Mailchimp customer record is automatically created only when both:
 
 - **Note:**  
   **SMS ONLY** is currently a placeholder for potential future development. At this time, **all customers must have an email address** to be synced to Mailchimp.
 
 ### Audience ID
-
-Mailchimp organizes contacts within **Audiences** (formerly known as lists).
-
-This field identifies the specific audience to which connector data will sync.
-
-The Audience ID is established during setup and should not be modified unless a new audience is being used.
+- Mailchimp organizes contacts within **Audiences** (formerly known as lists).
+- This field identifies the specific audience to which connector data will sync.
+- The Audience ID is established during setup and should not be modified unless a new audience is being used.
 
 ### Insert New Customer Records
 
 Controls whether Mailchimp profiles can create new Counterpoint customer records.
 
-### Checked
+| Setting | Behavior |
+|---|---|
+| **Checked** | Unmatched Mailchimp profiles will be inserted as new Counterpoint customer records. |
+| **Unchecked** | Unmatched Mailchimp profiles will not be inserted as new Counterpoint customer records. |
 
-Mailchimp profiles that do not match an existing Counterpoint customer will be inserted into Counterpoint.
+#### When Checked
 
 Customer records are created using fields configured in **Mailchimp Field Mapping – Customers Down** with an **Insert** action.
 
@@ -174,28 +174,23 @@ This option is commonly used when customer data originates from website sign-up 
 
 The connector attempts to match records using:
 
-* Mailchimp Profile ID
-* Email Address 1
+- Mailchimp Profile ID
+- Email Address 1
 
 If no match is found in either:
 
-* Counterpoint customer records (`AR_CUST`)
-* Mailchimp customer records (`USER_MAILCHIMP_CUST`)
+- Counterpoint customer records (`AR_CUST`)
+- Mailchimp customer records (`USER_MAILCHIMP_CUST`)
 
-a new Counterpoint customer record is created.
+A new Counterpoint customer record is created.
 
 All profiles changed since the last sync are evaluated, regardless of Mailchimp audience membership.
 
-### Unchecked
-
-New Counterpoint customer records will not be created by the connector.
-
-### Important Notes
-
-* Updating existing Counterpoint customer records is **independent** of this setting. Refer to **Mailchimp Field Mapping – Customers Down**.
-* Importing customers can result in **duplicate records** if email addresses were not previously captured in Counterpoint.
-* Duplicates can be merged manually, but this can be especially problematic for clients using **DL Scan** or **3310 forms**.
-* Consult with your **Business Analyst**, **vCIO**, or **Project Manager** before enabling this feature.
+> [!IMPORTANT]
+> - Updating existing Counterpoint customer records is independent of this setting. Refer to **Mailchimp Field Mapping – Customers Down**.
+> - Importing customers can result in duplicate records if email addresses were not previously captured in Counterpoint.
+> - Duplicate records can be merged manually, but duplicates may be especially problematic for clients using **DL Scan** or **3310 forms**.
+> - Consult with your **Business Analyst**, **vCIO**, or **Project Manager** before enabling this feature.
 
 ### Skip Merge Validation
 
@@ -218,59 +213,63 @@ SQL query configuration used to filter and select customer records for synchroni
 
 Supports automatic capitalization of customer fields during synchronization and processing.
 
-### Checked
-
-Customer information, including names and address-related fields, is automatically converted to uppercase formatting to maintain data consistency between Counterpoint and Mailchimp customer records.
-
-### Unchecked
-
-Customer information is synchronized using the original text formatting without automatic capitalization.
+| Setting | Behavior |
+|---|---|
+| **Checked** | Customer information, including names and address-related fields, is automatically converted to uppercase formatting to maintain data consistency between Counterpoint and Mailchimp customer records. |
+| **Unchecked** | Customer information is synchronized using the original text formatting without automatic capitalization. |
 
 ### Auto Opt-In by Default
 
-Optional automation designed to reduce manual steps during customer creation.
+Controls whether the opt-in value is automatically selected when creating a new Mailchimp customer record.
 
-### Checked
+| Setting | Behavior |
+|---|---|
+| **Checked** | The opt-in box is automatically selected when a new Mailchimp customer record is created. |
+| **Unchecked** | The opt-in box must be manually selected or provided through another process. |
 
-The opt-in box is automatically flagged when creating a new Mailchimp customer record.
-
-### Unchecked
-
-The opt-in box must be manually selected.
+This setting is intended to reduce manual steps during customer creation.
 
 ### Opt-In Definition
 
-Currently, the only supported opt-in definition is:
+Defines the Mailchimp subscription status used when a customer is opted in.
 
-* `Subscribed`
+Currently, the supported opt-in definition is:
+
+- `SUBSCRIBED`
 
 ### Opt-Out Definition
 
-Currently, the only supported opt-out definition is:
+Defines the Mailchimp subscription status used when a customer is opted out.
 
-* `Subscribed`
+Currently, the supported opt-out definition is:
+
+- `UNSUBSCRIBED`
 
 ### SMS # for Mailchimp
 
 Defines which Counterpoint customer phone number field is used to populate the Mailchimp **SMS Number – Mobile Phone** profile property.
 
-### Supported Options
+Supported options include:
 
-* Mobile Phone 1
-* Phone 1
+- `Mobile Phone 1`
+- `Phone 1`
 
-If the selected phone field does not meet the requirement of **exactly 10 numeric digits**, the phone number will not be sent to Mailchimp.
+If the selected phone field does not contain exactly **10 numeric digits**, the phone number will not be sent to Mailchimp.
 
-> This setting controls which phone number is populated and does **not** control SMS subscription consent.
+> This setting determines which phone number is sent to Mailchimp. It does **not** control SMS subscription consent.
 
 ### SMS Country Code
 
+Defines the country code added to SMS phone numbers sent to Mailchimp.
+
 Mailchimp requires all SMS phone numbers to include a country code.
 
-### Examples
+Examples:
 
-* `+1` — United States and Canada
-* `+52` — Mexico
+| Country | Code |
+|---|---|
+| United States and Canada | `+1` |
+| Mexico | `+52` |
 
 ### Send Sales  
 When enabled, the connector pushes sales data from Counterpoint to Mailchimp, allowing sales activity to be used for audience segmentation, reporting, or targeted marketing.  
