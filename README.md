@@ -446,13 +446,15 @@ This setting controls how blank values from Mailchimp are handled during import:
 
 ---
 ## SECTION 5: Mailchimp Item Field Mapping & Ticket Information
-Mailchimp accepts a limited amount of customer sales information. Ticket data is sent to Mailchimp’s Ecommerce fields, as Mailchimp does not provide dedicated fields for POS data.
-This configuration defines how item-related fields from Counterpoint are sent to Mailchimp so that product details are available for reporting, segmentation, and ecommerce activity tracking.
 
-### Item Field Mapping
-The following item mappings are configured:
+### Mailchimp Item Field Mapping
+Item field mapping defines how Counterpoint item values are sent to Mailchimp product fields.
 
 ![Mailchimp Item Field Mapping](./images/counterpoint-mailchimp-item-field-mapping.png)
+
+The item fields sent to Mailchimp are configurable. This allows different Counterpoint item fields to be mapped to Mailchimp product attributes, such as item ID, title, description, type, and URL, based on the client’s setup and reporting needs.
+
+Mailchimp accepts a limited set of customer sales information through its Ecommerce data structure. Because Mailchimp does not provide dedicated fields for Counterpoint POS ticket data, the connector sends ticket information to Mailchimp using Ecommerce fields.
 
 ### Ticket Header / Overall
 - Order Total  
@@ -463,6 +465,8 @@ The following item mappings are configured:
 - Item Description 
 - Quantity Purchased  
 - Price
+
+In addition to ticket and item details, Mailchimp also receives customer-level sales summary values, including:
 
 ### Additional Customer Data
 - Total Number of Tickets for that customer  
