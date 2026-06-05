@@ -24,7 +24,7 @@ If you would like the Mailchimp connector but your system does not meet these mi
 ## Table of Contents
 
 - [Minimum System Requirements](#minimum-system-requirements)
-- [SECTION 1: Mailchimp Audiences and Contacts](#section-1-mailchimp-audiences-and-contacts)
+- [SECTION 1: Mailchimp Audiences](#section-1-mailchimp-audiences)
 - [SECTION 2: Mailchimp Customer Records](#section-1-mailchimp-customer-records)
 - [SECTION 3: Mailchimp Configuration](#section-2-mailchimp-configuration)
 - [SECTION 4: Mailchimp Field Mapping - Customers Up](#section-3-mailchimp-field-mapping---customers-up)
@@ -41,7 +41,25 @@ If you would like the Mailchimp connector but your system does not meet these mi
 
 ---
 
-## SECTION 1: Mailchimp Customer Records
+## SECTION 1: Mailchimp Audiences
+
+The Mailchimp Connector defines how your Counterpoint customer data interacts with Mailchimp. It ensures that your Mailchimp audience and contacts stay updated so that email campaigns always use the most current customer information.
+
+If a client already has an audience set up in Mailchimp, they can choose to use that existing audience for their Counterpoint connection.  
+- Mailchimp generally recommends maintaining **a single audience** so that each contact has one unified record.
+- Segmentation — through **tags, groups, or segments** — can then be used to organize and target contacts within that audience.
+
+If a client does not have an existing audience to use, the Mailchimp Connector will automatically create one titled **Counterpoint** during setup.
+
+Only the audience defined in the **Mailchimp configuration settings** will receive data from Counterpoint. Information will not sync to any other audiences in the Mailchimp account.
+
+In Mailchimp, when the same contact (based on email address) exists in multiple audiences, each audience treats that contact as a **separate record**.  
+- Each record receives a unique **Mailchimp ID** within its respective audience.  
+- The contact’s activity history, tags, merge fields, marketing permissions, and subscription status are tracked independently for each audience.
+
+It is generally recommended to use a single audience to prevent duplicate records; however, sometimes clients have a specific requirement to keep POS contacts separate from others. 
+
+## SECTION 2: Mailchimp Customer Records
 
 The Mailchimp Connector adds a **Mailchimp Customers** button within Counterpoint, providing access to Mailchimp-specific customer fields directly from the Counterpoint customer record.
 
@@ -85,7 +103,7 @@ An optional **Mailchimp Customers Add-on-the-Fly** form can be configured to giv
 Please contact Rapid for a quote if you are interested in a customized add-on-the-fly form for your company.
 
 ---
-## SECTION 2: Mailchimp Configuration
+## SECTION 3: Mailchimp Configuration
 
 The Mailchimp connector includes several configuration options that control how it interacts with Mailchimp and Counterpoint. These settings should be reviewed carefully during setup and adjusted only when necessary. All configuration settings are managed in **Counterpoint > Connectors > Mailchimp > Mailchimp Configuration**. 
 
@@ -330,7 +348,7 @@ Additional internal configuration options exist within the connector. These are 
 
 ---
 
-## SECTION 3: Mailchimp Field Mapping - Customers Up
+## SECTION 4: Mailchimp Field Mapping - Customers Up
 
 The **Mailchimp Field Mapping – Customers Up** screen provides a user interface for managing which customer fields are sent from Counterpoint up to Mailchimp.
 
@@ -392,7 +410,7 @@ Example of a calculated field:
 
 ---
 
-## SECTION 4: Mailchimp Field Mapping – Customers Down
+## SECTION 5: Mailchimp Field Mapping – Customers Down
 
 The **Mailchimp Field Mapping – Customers Down** table provides a user interface for managing which customer fields are imported from Mailchimp down into Counterpoint.
 
@@ -446,7 +464,7 @@ This setting controls how blank values from Mailchimp are handled during import:
   This setting is **not recommended**.
 
 ---
-## SECTION 5: Mailchimp Item Field Mapping & Ticket Information
+## SECTION 6: Mailchimp Item Field Mapping & Ticket Information
 
 ### Mailchimp Item Field Mapping
 Item field mapping defines how Counterpoint item values are sent to Mailchimp product fields.
@@ -480,7 +498,7 @@ If desired, during connector installation, previous sales history can be include
 ### Special Note on Mailchimp's Product Category Field
 The Mailchimp connector supports a custom configuration that combines **category**, **subcategory**, and **vendor** details from Counterpoint into Mailchimp’s single `product category` field (formerly the `product vendor` field). Review the configuration section of this document to learn more about this functionality.
 
-## SECTION 6: Mailchimp Tag Mapping
+## SECTION 7: Mailchimp Tag Mapping
 
 The Mailchimp connector can automatically apply tags based on customer information stored in Counterpoint. During each sync, the connector evaluates each customer and determines which tags should apply based on a **custom condition filter** created for that specific rule.  
 
@@ -508,7 +526,7 @@ Multiple automated tags may be configured. Viewing the Mailchimp Tag Mapping tab
 
 ![Mailchimp Customer Tag Mapping Example List](./images/counterpoint-mailchimp-tag-mapping-example-list.png)
 
-## SECTION 7: Mailchimp Customer Tags  
+## SECTION 8: Mailchimp Customer Tags  
 
 When a customer qualifies for a new tag, a record is created in the **Mailchimp Customer Tags** table. This table displays tags waiting to be synced, and each record remains visible until it is processed by the connector.
 
@@ -539,7 +557,7 @@ Please contact Rapid for assistance in defining tagging criteria or if a quote i
 
 ---
 
-## SECTION 8: Mark All Mailchimp Messages as Read
+## SECTION 9: Mark All Mailchimp Messages as Read
 
 The **Mark All Mailchimp Messages as Read** menu option allows users to suppress repeated pop-up alerts in Counterpoint while retaining all Mailchimp connector messages for later review.
 
@@ -552,7 +570,7 @@ Marking messages as read stops the pop-up notifications but does **not** delete 
 
 ---
 
-## SECTION 9: Run Mailchimp Connector Button
+## SECTION 10: Run Mailchimp Connector Button
 
 The **Run Mailchimp Connector** menu option allows authorized users to manually trigger the Mailchimp Connector when needed. Manual execution is typically used for testing or troubleshooting and is not required during normal operation.
 
@@ -579,7 +597,7 @@ In both scenarios, the action flag is **automatically cleared** when execution b
 
 ---
 
-## SECTION 10: Mailchimp Customer Status View
+## SECTION 11: Mailchimp Customer Status View
 
 Each Mailchimp customer record includes a **sync status** that indicates its current state in the connector process. In some cases, it is helpful to review how many customer records fall into a particular status category.
 
@@ -600,7 +618,7 @@ For details on the meaning of each customer sync status value, refer back to **S
 
 ---
 
-## SECTION 11: Mailchimp Connector Execution and Sync Timing
+## SECTION 12: Mailchimp Connector Execution and Sync Timing
 
 The Mailchimp Connector operates as a **Windows Service**, automatically syncing customer profiles and transactional documents between Counterpoint and Mailchimp.
 
@@ -623,7 +641,7 @@ For details on how customer profile changes are evaluated and synchronized betwe
 
 ---
 
-## SECTION 12: Customer Profile Sync Logic and Workflow
+## SECTION 13: Customer Profile Sync Logic and Workflow
 
 This section describes the logical order and decision-making process used by the connector after a sync cycle begins.
 
@@ -649,7 +667,7 @@ These updates are then pushed up to Mailchimp, ensuring that Mailchimp profiles 
 
 ---
 
-## SECTION 13: Managing Customer Email and Phone Updates
+## SECTION 14: Managing Customer Email and Phone Updates
 
 When a customer is synced to Mailchimp, the connector stores the associated **Mailchimp Profile ID** on the customer record in Counterpoint. This Profile ID becomes the permanent link between the Counterpoint customer and the Mailchimp profile and is used for all future updates.  
 
