@@ -1,4 +1,4 @@
-# Rapid POS Mailchimp Connector - Version 2.05.00 - Coming Soon
+# Rapid POS Mailchimp Connector - Version 3.00.00 - Coming Soon
 Updated 02/20/2026
 
 ---
@@ -28,38 +28,41 @@ If you would like the Mailchimp connector but your system does not meet these mi
 - [Section 2: Mailchimp Configuration](#section-2-mailchimp-configuration)
 - [Section 3: Mailchimp Field Mapping – Customers Up](#section-3-mailchimp-field-mapping--customers-up)
 - [Section 4: Mailchimp Field Mapping – Customers Down](#section-4-mailchimp-field-mapping--customers-down)
-- [SECTION 5: Customer Information & Mailchimp Field Mapping](#section-2-customer-information--mailchimp-field-mapping)
-- [SECTION 6: Mailchimp Audiences and Contacts](#section-1-mailchimp-audiences-and-contacts)
-- [SECTION 7: Ticket & Item Information](#section-3-ticket--item-information)
-- [Section 8: Mailchimp Customer Status View](#section-9-mailchimp-customer-status-view)
-- [Section 9: Run Mailchimp Connector Button](#section-10-run-mailchimp-connector-button)
-- [Section 10: Mark All Mailchimp Messages as Read](#section-11-mark-all-mailchimp-messages-as-read)
-- [Section 11: Mailchimp Connector Execution and Sync Timing](#section-12-mailchimp-connector-execution-and-sync-timing)
+- [Section 5: Mailchimp Audiences and Contacts](#section-1-mailchimp-audiences-and-contacts)
+- [Section 6: Ticket & Item Information](#section-3-ticket--item-information)
+- [Section 7: Mailchimp Customer Status View](#section-9-mailchimp-customer-status-view)
+- [Section 8: Run Mailchimp Connector Button](#section-10-run-mailchimp-connector-button)
+- [Section 9: Mark All Mailchimp Messages as Read](#section-11-mark-all-mailchimp-messages-as-read)
+- [Section 10: Mailchimp Connector Execution and Sync Timing](#section-12-mailchimp-connector-execution-and-sync-timing)
 - [Conclusion](#conclusion)
 
 ---
 
-## SECTION 1: Klaviyo Customer Records
-
-### Mailchimp Customers
+## SECTION 1: Mailchimp Customer Records
 
 The Mailchimp Connector adds a **Mailchimp Customers** button within Counterpoint, providing access to Mailchimp-specific customer fields directly from the Counterpoint customer record.
 
 ![Customer Record - Klaviyo Customers Button](./images/counterpoint-customer-record-mailchimp-customers-button.png)
 
-
-
-
 The email address on the Mailchimp customer record is populated from **Email Address 1** on the Counterpoint customer record.
 
 Depending on configuration, the SMS phone number is populated from either **Phone 1** or **Mobile Phone 1** on the Counterpoint customer record, **only when it meets the following criteria**:
-
-* Contains **exactly 10 numeric digits**
-* Does **not** include letters
+- Contains **exactly 10 numeric digits**
+- Does **not** include letters
 
 If the configured phone number field contains more than or fewer than 10 digits, or if it includes letters, the SMS number will **not** be pushed to Mailchimp.
 
-<img width="985" height="691" alt="image" src="https://github.com/user-attachments/assets/ed57b5a6-0a77-4479-aee2-fb9459c0db0b" />
+![Mailchimp Customer Record](./images/counterpoint-klaviyo-customer-record.png)
+
+### Accessing Mailchimp Customer Records
+
+All Mailchimp customer records can also be accessed from:
+
+**Connectors > Mailchimp > Mailchimp Customer Records**
+
+This view allows records to be displayed in **table view**, where filters can be applied to review customers based on their current sync status.
+
+![Mailchimp Customers in Table View](./images/counterpoint-mailchimp-customers-table-view.png)
 
 ### Mailchimp Field Mapping
 
