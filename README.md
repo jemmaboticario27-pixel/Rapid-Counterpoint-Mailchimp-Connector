@@ -400,7 +400,7 @@ For clients using web-based sign-up forms or other Mailchimp integrations, this 
 
 Note: This is best viewed in _table view_.
 
-![Mailchimp Field Mapping Customers Down in Table View](./images/counterpoint-Mailchimp-field-mapping-customers-down-table-view.png)
+![Mailchimp Field Mapping Customers Down in Table View](./images/counterpoint-mailchimp-field-mapping-customers-down.png)
 
 ### Default Behavior
 
