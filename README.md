@@ -451,14 +451,7 @@ This configuration defines how item-related fields from Counterpoint are sent to
 ### Item Field Mapping
 The following item mappings are configured:
 
-| Counterpoint Item Field | Mailchimp Item Attribute |
-|---|---|
-| `DESCR` | Description |
-| `ITEM_NO` | Id |
-| `DESCR` | Title |
-| `ATTR_COD_1` | Type |
-| `URL` | Url |
-
+![Mailchimp Item Field Mapping](./images/counterpoint-mailchimp-item-field-mapping.png)
 
 ## SECTION 6: Mailchimp Tags
 
